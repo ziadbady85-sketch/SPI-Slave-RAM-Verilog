@@ -1,100 +1,38 @@
-# SPI Slave with RAM Wrapper – Verilog RTL Design
+# SPI Slave with RAM Interface
 
-A complete Verilog implementation of an **SPI slave interface connected to single-port RAM**, designed as a modular RTL system with command decoding, memory read/write transactions, and serial data transmission over MISO.
+Simple SPI Slave RTL design in Verilog connected to an internal RAM.
 
-This project demonstrates **protocol-based digital design, FSM implementation, memory interfacing, and verification using a directed testbench**.
+## Project Structure
 
----
+* rtl/slave.v
+* rtl/RAM.v
+* rtl/Spi_Wrapper.v
+* tb/Spi_Wrapper_tb.v
 
-## 📌 Overview
-The design integrates three main RTL blocks:
+## Features
 
-- **SPI Slave Controller**
-- **Single-Port RAM**
-- **Top Wrapper Module**
+* 10-bit SPI frame
+* FSM controller
+* RAM read/write
+* MISO transmission
+* Testbench included
 
-The SPI slave receives serial commands on **MOSI**, decodes the operation, and communicates with RAM for:
+## FSM States
 
-- Write Address
-- Write Data
-- Read Address
-- Read Data
+* IDLE
+* CHK_CMD
+* WRITE
+* READ_ADD
+* READ_DATA
 
-Read data is serialized back through **MISO**.
+## Tools
 
----
+* Verilog HDL
+* ModelSim / QuestaSim
+* Vivado
 
-## 🏗️ RTL Architecture
+## Status
 
-### 1) SPI Slave (`slave.v`)
-Implements the SPI protocol receive/transmit logic using an FSM.
-
-### FSM States
-- `IDLE`
-- `CHK_CMD`
-- `WRITE`
-- `READ_ADD`
-- `READ_DATA`
-
-### Responsibilities
-- Serial-to-parallel conversion
-- Command decoding
-- Address/data packet capture
-- Generating `rx_valid`
-- Sending RAM data serially on `MISO`
-
----
-
-### 2) RAM (`RAM.v`)
-A synchronous single-port memory with command-based access.
-
-### Supported Commands
-| Command | Function |
-|---|---|
-| `00` | Store write address |
-| `01` | Write data |
-| `10` | Store read address |
-| `11` | Output read data |
-
----
-
-### 3) Wrapper (`Spi_Wrapper.v`)
-Top-level integration of:
-- SPI slave
-- RAM
-- handshake signals
-- serial output path
-
-This module represents the complete system-level SPI memory peripheral.
-
----
-
-## 🔄 Data Flow
-1. Master sends serial command through `MOSI`
-2. SPI slave decodes packet
-3. `rx_valid` triggers RAM transaction
-4. RAM performs read/write
-5. Read data returned as `tx_data`
-6. SPI slave serializes output on `MISO`
-
----
-
-## 🧪 Verification
-A dedicated testbench validates:
-
-- Write address transaction
-- Write data transaction
-- Read address transaction
-- Read data transaction
-- Multiple consecutive read operations
-- RAM initialization using `$readmemh`
-
-### Testbench Features
-- Fully clock-driven
-- Directed stimulus
-- Memory preload from file
-- Internal memory access checks
-- Sequential SPI transaction validation
-
----
-
+RTL Completed
+Testbench Verified
+Read/Write Working
